@@ -1,0 +1,45 @@
+<h1># {{ channelName }}</h1>
+
+<p>
+  Logged in as: <strong>{{ username }}</strong>
+</p>
+
+<hr>
+
+@if (notifications.length > 0) {
+  <div>
+    @for (notification of notifications; track $index) {
+      <p>
+        <em>{{ notification }}</em>
+      </p>
+    }
+  </div>
+}
+
+<h2>Messages</h2>
+
+@if (messages.length === 0) {
+  <p>No messages yet.</p>
+}
+
+@for (msg of messages; track $index) {
+  <div>
+    <strong>{{ msg.username }}:</strong>
+    {{ msg.message }}
+
+    <small>
+      {{ msg.timestamp }}
+    </small>
+  </div>
+}
+
+<br>
+
+<input
+  [(ngModel)]="newMessage"
+  (keyup.enter)="sendMessage()"
+  placeholder="Type a message">
+
+<button (click)="sendMessage()">
+  Send
+</button>

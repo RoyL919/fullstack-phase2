@@ -1,0 +1,53 @@
+<h1>Groups</h1>
+
+@if (message) {
+  <p>{{ message }}</p>
+}
+
+<h2>Create Group</h2>
+
+<input
+  [(ngModel)]="newGroupName"
+  placeholder="Group name">
+
+<button (click)="createGroup()">
+  Create Group
+</button>
+
+<hr>
+
+<h2>Available Groups</h2>
+
+@for (group of groups; track group._id) {
+  <div>
+    <button (click)="selectGroup(group)">
+      {{ group.name }}
+    </button>
+  </div>
+}
+
+@if (selectedGroup) {
+
+  <hr>
+
+  <h2>{{ selectedGroup.name }}</h2>
+
+  <h3>Channels</h3>
+
+  @for (channel of channels; track channel._id) {
+    <p>
+        <a
+          [routerLink]="['/chat', channel._id, channel.name]">
+          # {{ channel.name }}
+        </a>
+    </p>
+  }
+
+  <input
+    [(ngModel)]="newChannelName"
+    placeholder="Channel name">
+
+  <button (click)="createChannel()">
+    Create Channel
+  </button>
+}
