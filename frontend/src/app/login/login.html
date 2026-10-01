@@ -6,16 +6,24 @@
 
     <label>Username</label>
     <input
+      id="username"
       type="text"
       [(ngModel)]="username"
       name="username"
+      minlength="3"
+      maxlength="20"
+      pattern="[a-zA-Z0-9_]+"
+      autocomplete="username"
       required>
 
     <label>Password</label>
     <input
+      id="password"
       type="password"
       [(ngModel)]="password"
       name="password"
+      minlength="6"
+      autocomplete="current-password"
       required>
 
     @if (errorMessage) {

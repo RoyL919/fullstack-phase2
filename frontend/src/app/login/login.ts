@@ -22,8 +22,35 @@ export class Login {
 
   login(): void {
 
+    this.errorMessage = '';
+
+    // Remove accidental spaces from username
+    this.username = this.username.trim();
+    
+    // Required fields
     if (!this.username || !this.password) {
       this.errorMessage = 'Please enter a username and password.';
+      return;
+    }
+
+    // Username length
+    if (this.username.length < 3 || this.username.length > 20) {
+      this.errorMessage =
+        'Username must be between 3 and 20 characters.';
+      return;
+    }
+
+    // Username characters
+    if (!/^[a-zA-Z0-9_]+$/.test(this.username)) {
+      this.errorMessage =
+        'Username can only contain letters, numbers and underscores.';
+      return;
+    }
+
+    // Password length
+    if (this.password.length < 6) {
+      this.errorMessage =
+        'Password must be at least 6 characters.';
       return;
     }
 

@@ -1,11 +1,12 @@
 const express = require('express');
 const { ObjectId } = require('mongodb');
 const { getDB } = require('../db/database');
+const adminAuth = require('../middleware/adminAuth');
 
 const router = express.Router();
 
 // Get all users
-router.get('/', async (req, res) => {
+router.get('/', adminAuth, async (req, res) => {
     try {
         const db = getDB();
 
@@ -25,7 +26,7 @@ router.get('/', async (req, res) => {
 });
 
 // Change a user's role
-router.put('/:id/role', async (req, res) => {
+router.put('/:id/role', adminAuth, async (req, res) => {
     try {
         const { role } = req.body;
 
@@ -62,7 +63,7 @@ router.put('/:id/role', async (req, res) => {
 });
 
 // Delete user
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', adminAuth, async (req, res) => {
     try {
         const db = getDB();
 

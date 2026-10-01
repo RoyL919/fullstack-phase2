@@ -7,11 +7,46 @@ const router = express.Router();
 // Register a new user
 router.post('/register', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        let { username, password } = req.body;
 
+        // Check data types
+        if (
+            typeof username !== 'string' ||
+            typeof password !== 'string'
+        ) {
+            return res.status(400).json({
+                message: 'Username and password must be text'
+            });
+        }
+
+        // Remove accidental spaces
+        username = username.trim();
+
+        // Required fields
         if (!username || !password) {
             return res.status(400).json({
                 message: 'Username and password are required'
+            });
+        }
+
+        // Username validation
+        if (username.length < 3 || username.length > 20) {
+            return res.status(400).json({
+                message: 'Username must be between 3 and 20 characters'
+            });
+        }
+
+        // Only simple username characters
+        if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            return res.status(400).json({
+                message: 'Username can only contain letters, numbers and underscores'
+            });
+        }
+
+        // Password validation
+        if (password.length < 6) {
+            return res.status(400).json({
+                message: 'Password must be at least 6 characters'
             });
         }
 
@@ -46,7 +81,7 @@ router.post('/register', async (req, res) => {
         console.error(error);
 
         res.status(500).json({
-            message: 'Server error'
+            message: 'Unable to register user. Please try again.'
         });
     }
 });
@@ -54,7 +89,18 @@ router.post('/register', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        let { username, password } = req.body;
+
+    if (
+        typeof username !== 'string' ||
+        typeof password !== 'string'
+    ) {
+        return res.status(400).json({
+            message: 'Username and password are required'
+        });
+    }
+
+    username = username.trim();
 
         if (!username || !password) {
             return res.status(400).json({
