@@ -3,6 +3,7 @@
 **Name:** Yangzhe Lin  
 **Student Number:** s5327758  
 **Workshop:** Thursday 11:00a.m.
+**GitHub Repository:** https://github.com/RoyL919/fullstack-phase2.git
 
 ---
 
