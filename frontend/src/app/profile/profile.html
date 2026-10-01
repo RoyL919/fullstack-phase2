@@ -1,0 +1,58 @@
+<h1>My Profile</h1>
+
+@if (user) {
+
+  <p>
+    Username: <strong>{{ user.username }}</strong>
+  </p>
+
+  <p>
+    Role: {{ user.role }}
+  </p>
+
+  <h2>Profile Image</h2>
+
+  @if (user.profileImage) {
+    <img
+      [src]="user.profileImage"
+      alt="Profile image"
+      style="
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+      ">
+  } @else {
+    <p>No profile image.</p>
+  }
+
+  <br><br>
+
+  <input
+    type="file"
+    accept="image/*"
+    (change)="selectImage($event)">
+
+  @if (selectedImage) {
+    <p>
+      Selected: {{ selectedImage.name }}
+    </p>
+  }
+
+  <button
+    (click)="uploadProfileImage()"
+    [disabled]="uploading">
+
+    @if (uploading) {
+      Uploading...
+    } @else {
+      Upload Profile Image
+    }
+
+  </button>
+
+  @if (message) {
+    <p>{{ message }}</p>
+  }
+
+}

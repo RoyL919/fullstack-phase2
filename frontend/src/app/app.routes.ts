@@ -8,6 +8,7 @@ import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
 import { Groups } from './groups/groups';
 import { Chat } from './chat/chat';
+import { Profile } from './profile/profile';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,11 @@ export const routes: Routes = [
   {
     path: 'chat/:channelId/:channelName',
     component: Chat,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'profile',
+    component: Profile,
     canActivate: [authGuard]
   },
   {

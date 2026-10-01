@@ -9,6 +9,7 @@ const userRoutes = require('./routes/users');
 const groupRoutes = require('./routes/groups');
 const channelRoutes = require('./routes/channels');
 const messageRoutes = require('./routes/messages');
+const uploadRoutes = require('./routes/uploads');
 
 
 const app = express();
@@ -29,6 +30,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/groups', groupRoutes);
 app.use('/api/channels', channelRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/uploads', uploadRoutes);
 
 
 app.get('/api/test', (req, res) => {
@@ -55,7 +57,13 @@ io.on('connection', (socket) => {
     });
 
     // User sends a chat message
-    socket.on('chatMessage', async ({ channelId, username, message }) => {
+    socket.on('chatMessage', async ({ 
+        channelId, 
+        username, 
+        message, 
+        imageUrl,
+        profileImage
+    }) => {
 
         try {
             const { getDB } = require('./db/database');
@@ -66,7 +74,9 @@ io.on('connection', (socket) => {
             const chatMessage = {
                 channelId: new ObjectId(channelId),
                 username: username,
-                message: message.trim(),
+                message: message ? message.trim() : '',
+                imageUrl: imageUrl || '',
+                profileImage: profileImage || '',
                 timestamp: new Date()
             };
 

@@ -29,12 +29,16 @@ export class SocketService {
   sendMessage(
     channelId: string,
     username: string,
-    message: string
+    message: string,
+    imageUrl: string = '',
+    profileImage: string = ''
   ): void {
     this.socket.emit('chatMessage', {
       channelId,
       username,
-      message
+      message,
+      imageUrl,
+      profileImage
     });
   }
 

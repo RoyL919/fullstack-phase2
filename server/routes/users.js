@@ -89,4 +89,46 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// Update user's profile image
+router.put('/:id/profile-image', async (req, res) => {
+    try {
+        const { profileImage } = req.body;
+
+        if (!profileImage) {
+            return res.status(400).json({
+                message: 'Profile image is required'
+            });
+        }
+
+        const db = getDB();
+
+        const result = await db.collection('users').updateOne(
+            { _id: new ObjectId(req.params.id) },
+            {
+                $set: {
+                    profileImage: profileImage
+                }
+            }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        res.json({
+            message: 'Profile image updated',
+            profileImage
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(400).json({
+            message: 'Unable to update profile image'
+        });
+    }
+});
+
 module.exports = router;

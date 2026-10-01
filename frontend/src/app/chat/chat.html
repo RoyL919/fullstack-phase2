@@ -22,10 +22,39 @@
   <p>No messages yet.</p>
 }
 
+<!-- Messages -->
 @for (msg of messages; track $index) {
   <div>
+    
+    @if (msg.profileImage) {
+        <img
+          [src]="msg.profileImage"
+          alt="Profile image"
+          style="
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+            vertical-align: middle;
+            margin-right: 8px;
+          ">
+    }
+    
     <strong>{{ msg.username }}:</strong>
-    {{ msg.message }}
+
+    @if (msg.message) {
+      <span>{{ msg.message }}</span>
+    }
+
+    <!-- Chat image -->
+    @if (msg.imageUrl) {
+      <div>
+        <img
+          [src]="msg.imageUrl"
+          alt="Chat image"
+          style="max-width: 300px; max-height: 300px;">
+      </div>
+    }
 
     <small>
       {{ msg.timestamp }}
@@ -35,11 +64,35 @@
 
 <br>
 
+<!-- Text message -->
 <input
   [(ngModel)]="newMessage"
   (keyup.enter)="sendMessage()"
   placeholder="Type a message">
 
-<button (click)="sendMessage()">
-  Send
+<br><br>
+
+<!-- Image selection -->
+<input
+  type="file"
+  accept="image/*"
+  (change)="selectImage($event)">
+
+@if (selectedImage) {
+  <p>
+    Selected: {{ selectedImage.name }}
+  </p>
+}
+
+<!-- Send button -->
+<button
+  (click)="sendMessage()"
+  [disabled]="uploading">
+
+  @if (uploading) {
+    Uploading...
+  } @else {
+    Send
+  }
+
 </button>
