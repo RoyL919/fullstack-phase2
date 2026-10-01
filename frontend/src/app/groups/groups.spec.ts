@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Groups } from './groups';
+import { provideRouter } from '@angular/router';
 
 describe('Groups', () => {
   let component: Groups;
@@ -8,6 +9,14 @@ describe('Groups', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Groups],
+      providers: [
+        provideRouter([
+          {
+            path: 'chat/:channelId/:channelName',
+            component: Groups
+          }
+        ])
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(Groups);
