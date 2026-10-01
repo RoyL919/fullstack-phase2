@@ -1,53 +1,63 @@
-<h1>Groups</h1>
+<div class="page-container">
 
-@if (message) {
-  <p>{{ message }}</p>
-}
+  <nav class="page-nav">
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/groups">Groups</a>
+    <a routerLink="/profile">Profile</a>
+  </nav>
 
-<h2>Create Group</h2>
+    <h1>Groups</h1>
 
-<input
-  [(ngModel)]="newGroupName"
-  placeholder="Group name">
+    @if (message) {
+    <p>{{ message }}</p>
+    }
 
-<button (click)="createGroup()">
-  Create Group
-</button>
+    <h2>Create Group</h2>
 
-<hr>
+    <input
+    [(ngModel)]="newGroupName"
+    placeholder="Group name">
 
-<h2>Available Groups</h2>
-
-@for (group of groups; track group._id) {
-  <div>
-    <button (click)="selectGroup(group)">
-      {{ group.name }}
+    <button (click)="createGroup()">
+    Create Group
     </button>
-  </div>
-}
 
-@if (selectedGroup) {
+    <hr>
 
-  <hr>
+    <h2>Available Groups</h2>
 
-  <h2>{{ selectedGroup.name }}</h2>
+    @for (group of groups; track group._id) {
+    <div>
+        <button (click)="selectGroup(group)">
+        {{ group.name }}
+        </button>
+    </div>
+    }
 
-  <h3>Channels</h3>
+    @if (selectedGroup) {
 
-  @for (channel of channels; track channel._id) {
-    <p>
-        <a
-          [routerLink]="['/chat', channel._id, channel.name]">
-          # {{ channel.name }}
-        </a>
-    </p>
-  }
+    <hr>
 
-  <input
-    [(ngModel)]="newChannelName"
-    placeholder="Channel name">
+    <h2>{{ selectedGroup.name }}</h2>
 
-  <button (click)="createChannel()">
-    Create Channel
-  </button>
-}
+    <h3>Channels</h3>
+
+    @for (channel of channels; track channel._id) {
+        <p>
+            <a
+            [routerLink]="['/chat', channel._id, channel.name]">
+            # {{ channel.name }}
+            </a>
+        </p>
+    }
+
+    <input
+        [(ngModel)]="newChannelName"
+        placeholder="Channel name">
+
+    <button (click)="createChannel()">
+        Create Channel
+    </button>
+    }
+
+</div>

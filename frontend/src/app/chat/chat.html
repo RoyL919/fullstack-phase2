@@ -1,98 +1,108 @@
-<h1># {{ channelName }}</h1>
+<div class="page-container">
 
-<p>
-  Logged in as: <strong>{{ username }}</strong>
-</p>
-
-<hr>
-
-@if (notifications.length > 0) {
-  <div>
-    @for (notification of notifications; track $index) {
-      <p>
-        <em>{{ notification }}</em>
-      </p>
-    }
-  </div>
-}
-
-<h2>Messages</h2>
-
-@if (messages.length === 0) {
-  <p>No messages yet.</p>
-}
-
-<!-- Messages -->
-@for (msg of messages; track $index) {
-  <div>
+  <nav class="page-nav">
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/groups">Groups</a>
+    <a routerLink="/profile">Profile</a>
+  </nav>    
     
-    @if (msg.profileImage) {
-        <img
-          [src]="msg.profileImage"
-          alt="Profile image"
-          style="
-            width: 40px;
-            height: 40px;
-            object-fit: cover;
-            border-radius: 50%;
-            vertical-align: middle;
-            margin-right: 8px;
-          ">
-    }
-    
-    <strong>{{ msg.username }}:</strong>
+    <h1># {{ channelName }}</h1>
 
-    @if (msg.message) {
-      <span>{{ msg.message }}</span>
+    <p>
+    Logged in as: <strong>{{ username }}</strong>
+    </p>
+
+    <hr>
+
+    @if (notifications.length > 0) {
+    <div>
+        @for (notification of notifications; track $index) {
+        <p>
+            <em>{{ notification }}</em>
+        </p>
+        }
+    </div>
     }
 
-    <!-- Chat image -->
-    @if (msg.imageUrl) {
-      <div>
-        <img
-          [src]="msg.imageUrl"
-          alt="Chat image"
-          style="max-width: 300px; max-height: 300px;">
-      </div>
+    <h2>Messages</h2>
+
+    @if (messages.length === 0) {
+    <p>No messages yet.</p>
     }
 
-    <small>
-      {{ msg.timestamp }}
-    </small>
-  </div>
-}
+    <!-- Messages -->
+    @for (msg of messages; track $index) {
+    <div>
+        
+        @if (msg.profileImage) {
+            <img
+            [src]="msg.profileImage"
+            alt="Profile image"
+            style="
+                width: 40px;
+                height: 40px;
+                object-fit: cover;
+                border-radius: 50%;
+                vertical-align: middle;
+                margin-right: 8px;
+            ">
+        }
+        
+        <strong>{{ msg.username }}:</strong>
 
-<br>
+        @if (msg.message) {
+        <span>{{ msg.message }}</span>
+        }
 
-<!-- Text message -->
-<input
-  [(ngModel)]="newMessage"
-  (keyup.enter)="sendMessage()"
-  placeholder="Type a message">
+        <!-- Chat image -->
+        @if (msg.imageUrl) {
+        <div>
+            <img
+            [src]="msg.imageUrl"
+            alt="Chat image"
+            style="max-width: 300px; max-height: 300px;">
+        </div>
+        }
 
-<br><br>
+        <small>
+        {{ msg.timestamp }}
+        </small>
+    </div>
+    }
 
-<!-- Image selection -->
-<input
-  type="file"
-  accept="image/*"
-  (change)="selectImage($event)">
+    <br>
 
-@if (selectedImage) {
-  <p>
-    Selected: {{ selectedImage.name }}
-  </p>
-}
+    <!-- Text message -->
+    <input
+    [(ngModel)]="newMessage"
+    (keyup.enter)="sendMessage()"
+    placeholder="Type a message">
 
-<!-- Send button -->
-<button
-  (click)="sendMessage()"
-  [disabled]="uploading">
+    <br><br>
 
-  @if (uploading) {
-    Uploading...
-  } @else {
-    Send
-  }
+    <!-- Image selection -->
+    <input
+    type="file"
+    accept="image/*"
+    (change)="selectImage($event)">
 
-</button>
+    @if (selectedImage) {
+    <p>
+        Selected: {{ selectedImage.name }}
+    </p>
+    }
+
+    <!-- Send button -->
+    <button
+    (click)="sendMessage()"
+    [disabled]="uploading">
+
+    @if (uploading) {
+        Uploading...
+    } @else {
+        Send
+    }
+
+    </button>
+
+</div>

@@ -1,11 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user';
 import { User } from '../services/auth';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-admin',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './admin.html',
   styleUrl: './admin.css'
 })

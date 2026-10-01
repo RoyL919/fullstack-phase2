@@ -1,36 +1,47 @@
-<h1>Admin Panel</h1>
+<div class="page-container">
 
-<h2>User Management</h2>
+  <nav class="page-nav">
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/groups">Groups</a>
+    <a routerLink="/profile">Profile</a>
+    <a routerLink="/admin">Admin</a>
+  </nav>    
+    
+    <h1>Admin Panel</h1>
 
-@if (message) {
-  <p>{{ message }}</p>
-}
+    <h2>User Management</h2>
 
-<table border="1">
-  <thead>
-    <tr>
-      <th>Username</th>
-      <th>Role</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    @for (user of users; track user._id) {
-      <tr>
-        <td>{{ user.username }}</td>
-        <td>{{ user.role }}</td>
-
-        <td>
-          <button (click)="changeRole(user)">
-            Change Role
-          </button>
-
-          <button (click)="deleteUser(user)">
-            Delete
-          </button>
-        </td>
-      </tr>
+    @if (message) {
+    <p>{{ message }}</p>
     }
-  </tbody>
-</table>
+
+    <table border="1">
+    <thead>
+        <tr>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (user of users; track user._id) {
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.role }}</td>
+
+            <td>
+            <button (click)="changeRole(user)">
+                Change Role
+            </button>
+
+            <button (click)="deleteUser(user)">
+                Delete
+            </button>
+            </td>
+        </tr>
+        }
+    </tbody>
+    </table>
+
+</div>

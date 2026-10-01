@@ -1,58 +1,68 @@
-<h1>My Profile</h1>
+<div class="page-container">
 
-@if (user) {
+  <nav class="page-nav">
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/groups">Groups</a>
+    <a routerLink="/profile">Profile</a>
+  </nav>
 
-  <p>
-    Username: <strong>{{ user.username }}</strong>
-  </p>
+    <h1>My Profile</h1>
 
-  <p>
-    Role: {{ user.role }}
-  </p>
+    @if (user) {
 
-  <h2>Profile Image</h2>
-
-  @if (user.profileImage) {
-    <img
-      [src]="user.profileImage"
-      alt="Profile image"
-      style="
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 50%;
-      ">
-  } @else {
-    <p>No profile image.</p>
-  }
-
-  <br><br>
-
-  <input
-    type="file"
-    accept="image/*"
-    (change)="selectImage($event)">
-
-  @if (selectedImage) {
     <p>
-      Selected: {{ selectedImage.name }}
+        Username: <strong>{{ user.username }}</strong>
     </p>
-  }
 
-  <button
-    (click)="uploadProfileImage()"
-    [disabled]="uploading">
+    <p>
+        Role: {{ user.role }}
+    </p>
 
-    @if (uploading) {
-      Uploading...
+    <h2>Profile Image</h2>
+
+    @if (user.profileImage) {
+        <img
+        [src]="user.profileImage"
+        alt="Profile image"
+        style="
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+        ">
     } @else {
-      Upload Profile Image
+        <p>No profile image.</p>
     }
 
-  </button>
+    <br><br>
 
-  @if (message) {
-    <p>{{ message }}</p>
-  }
+    <input
+        type="file"
+        accept="image/*"
+        (change)="selectImage($event)">
 
-}
+    @if (selectedImage) {
+        <p>
+        Selected: {{ selectedImage.name }}
+        </p>
+    }
+
+    <button
+        (click)="uploadProfileImage()"
+        [disabled]="uploading">
+
+        @if (uploading) {
+        Uploading...
+        } @else {
+        Upload Profile Image
+        }
+
+    </button>
+
+    @if (message) {
+        <p>{{ message }}</p>
+    }
+
+    }
+
+</div>
