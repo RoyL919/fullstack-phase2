@@ -111,11 +111,15 @@
 }
 
 .current-user {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 12px;
-  border-top: 1px solid rgba(255,255,255,.12);
+  width: 100%;
+  height: 64px;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
 }
 
 .current-user img,

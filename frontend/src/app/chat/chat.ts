@@ -46,6 +46,7 @@ export class Chat implements OnInit, OnDestroy {
   newChannelName = '';
   showGroupForm = false;
   newGroupName = '';
+  showSettings = false;
   
   constructor(
     private socketService: SocketService,
@@ -55,6 +56,16 @@ export class Chat implements OnInit, OnDestroy {
     private http: HttpClient,
     private groupService: GroupService
   ) {}
+
+  toggleSettings(): void {
+    this.showSettings = !this.showSettings;
+  }
+
+  logout(): void {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
 
   ngOnInit(): void {
 

@@ -90,12 +90,24 @@
 
         <button
             class="settings-button"
-            title="Settings">
+            (click)="toggleSettings()">
             ⚙
         </button>
 
-    </div>
+        @if (showSettings) {
+          <div class="settings-menu">
 
+            <a routerLink="/profile">
+              Profile
+            </a>
+
+            <button (click)="logout()">
+                Log out
+            </button>
+
+          </div>
+        }
+    </div>
   </aside>
 
 

@@ -32,6 +32,8 @@ export class Groups implements OnInit {
   message = '';
   user: any = null;
 
+  showSettings = false;
+
   constructor(
     private groupService: GroupService,
     private cdr: ChangeDetectorRef,
@@ -125,5 +127,15 @@ export class Groups implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  toggleSettings(): void {
+    this.showSettings = !this.showSettings;
+  }
+
+  logout(): void {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 }

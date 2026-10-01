@@ -45,14 +45,6 @@
 
     <nav class="main-navigation">
 
-      <a routerLink="/dashboard">
-        Dashboard
-      </a>
-
-      <a routerLink="/profile">
-        Profile
-      </a>
-
       @if (user?.role === 'admin') {
         <a routerLink="/admin">
           Admin
@@ -60,7 +52,51 @@
       }
 
     </nav>
+    <!-- BOTTOM USER SECTION -->
+    <div class="current-user">
 
+        <a
+            routerLink="/profile"
+            class="profile-button">
+
+            @if (user?.profileImage) {
+                <img
+                    [src]="user.profileImage"
+                    alt="Profile">
+            } @else {
+                <div class="user-placeholder">
+                    {{ user?.username?.charAt(0)?.toUpperCase() }}
+                </div>
+            }
+
+            <div class="user-details">
+                <strong>{{ user?.username }}</strong>
+                <span>{{ user?.role }}</span>
+            </div>
+
+        </a>
+
+        <button
+            class="settings-button"
+            (click)="toggleSettings()">
+            ⚙
+        </button>
+
+        @if (showSettings) {
+         <div class="settings-menu">
+
+            <a routerLink="/profile">
+             Profile
+            </a>
+
+            <button (click)="logout()">
+                Log out
+            </button>
+
+        </div>
+        }
+
+    </div>
   </aside>
 
 
