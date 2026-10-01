@@ -6,10 +6,11 @@ import {
 
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
 })
@@ -20,6 +21,7 @@ export class Profile implements OnInit {
 
   uploading = false;
   message = '';
+  description = '';
 
   constructor(
     private http: HttpClient,
@@ -32,6 +34,7 @@ export class Profile implements OnInit {
 
     if (storedUser) {
       this.user = JSON.parse(storedUser);
+      this.description = this.user.description || ''.trim();
     }
   }
 
@@ -106,4 +109,37 @@ export class Profile implements OnInit {
       }
     });
   }
+
+  saveDescription(): void {
+
+    if (!this.user?._id) {
+      return;
+    }
+
+    this.http.put<any>(
+      `http://localhost:3000/api/users/${this.user._id}/description`,
+      {
+        description: this.description
+      }
+    ).subscribe({
+      next: (response) => {
+
+        this.user.description = response.description;
+
+        localStorage.setItem(
+          'user',
+          JSON.stringify(this.user)
+        );
+
+        this.message = 'Description saved.';
+      },
+
+      error: (error) => {
+        this.message =
+          error.error?.message ||
+          'Unable to save description.';
+      }
+    });
+  }
+  
 }

@@ -132,4 +132,48 @@ router.put('/:id/profile-image', async (req, res) => {
     }
 });
 
+// Update user description
+router.put('/:id/description', async (req, res) => {
+    try {
+        const { description } = req.body;
+
+        if (typeof description !== 'string') {
+            return res.status(400).json({
+                message: 'Description is required'
+            });
+        }
+
+        const db = getDB();
+
+        const result = await db.collection('users').updateOne(
+            {
+                _id: new ObjectId(req.params.id)
+            },
+            {
+                $set: {
+                    description: description.trim()
+                }
+            }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        res.json({
+            message: 'Description updated',
+            description: description.trim()
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(400).json({
+            message: 'Unable to update description'
+        });
+    }
+});
+
 module.exports = router;

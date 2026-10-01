@@ -1,68 +1,151 @@
-<div class="page-container">
+<div class="profile-page">
 
-  <nav class="page-nav">
-    <a routerLink="/dashboard">Dashboard</a>
-    <a routerLink="/groups">Groups</a>
-    <a routerLink="/profile">Profile</a>
-  </nav>
+  <header class="profile-header">
 
-    <h1>My Profile</h1>
+    <a routerLink="/groups" class="back-link">
+      ← Back to ChatSpace
+    </a>
+
+    <div class="brand">
+      <div class="brand-logo">C</div>
+      <span>ChatSpace</span>
+    </div>
+
+  </header>
+
+
+  <main class="profile-content">
+
+    <div class="page-title">
+      <h1>My Profile</h1>
+      <p>Manage your ChatSpace profile and profile image.</p>
+    </div>
+
 
     @if (user) {
 
-    <p>
-        Username: <strong>{{ user.username }}</strong>
-    </p>
+      <div class="profile-card">
 
-    <p>
-        Role: {{ user.role }}
-    </p>
+        <div class="profile-main">
 
-    <h2>Profile Image</h2>
+          <div class="avatar-section">
 
-    @if (user.profileImage) {
-        <img
-        [src]="user.profileImage"
-        alt="Profile image"
-        style="
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 50%;
-        ">
-    } @else {
-        <p>No profile image.</p>
+            <label
+                for="profile-image-input"
+                class="avatar-wrapper">
+
+                @if (user.profileImage) {
+                    <img
+                        [src]="user.profileImage"
+                        alt="Profile image"
+                        class="profile-image">
+                } @else {
+                    <div class="profile-placeholder">
+                        {{ user.username.charAt(0).toUpperCase() }}
+                    </div>
+                }
+
+                <div class="avatar-overlay">
+                    Change photo
+                </div>
+
+            </label>
+
+            <input
+                id="profile-image-input"
+                class="hidden-file-input"
+                type="file"
+                accept="image/*"
+                (change)="selectImage($event)">
+
+            @if (selectedImage) {
+
+                <div class="photo-actions">
+
+                    <span>{{ selectedImage.name }}</span>
+
+                    <button
+                        class="upload-button"
+                        (click)="uploadProfileImage()"
+                        [disabled]="uploading">
+
+                        @if (uploading) {
+                            Uploading...
+                        } @else {
+                            Upload Photo
+                        }
+
+                    </button>
+
+                </div>
+
+            }
+
+          </div>
+
+
+          <div class="account-details">
+
+            <h2>{{ user.username }}</h2>
+
+            <span
+              class="role-badge"
+              [class.admin-role]="user.role === 'admin'">
+              {{ user.role }}
+            </span>
+
+            <div class="details">
+
+              <div class="detail-row">
+                <span class="detail-label">Username</span>
+                <strong>{{ user.username }}</strong>
+              </div>
+
+              <div class="detail-row">
+                <span class="detail-label">Role</span>
+                <strong>{{ user.role }}</strong>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="description-section">
+
+            <h3>About Me</h3>
+
+            <p>
+                Tell other people a little about yourself.
+            </p>
+
+            <textarea
+                [(ngModel)]="description"
+                name="description"
+                placeholder="Write something about yourself..."
+                maxlength="300"></textarea>
+
+            <div class="description-footer">
+
+                <span class="character-count">
+                    {{ description.length }}/300
+                </span>
+
+                <button
+                    class="save-button"
+                    (click)="saveDescription()">
+                    Save Description
+                </button>
+
+            </div>
+
+        </div>
+
+      </div>
+
     }
 
-    <br><br>
-
-    <input
-        type="file"
-        accept="image/*"
-        (change)="selectImage($event)">
-
-    @if (selectedImage) {
-        <p>
-        Selected: {{ selectedImage.name }}
-        </p>
-    }
-
-    <button
-        (click)="uploadProfileImage()"
-        [disabled]="uploading">
-
-        @if (uploading) {
-        Uploading...
-        } @else {
-        Upload Profile Image
-        }
-
-    </button>
-
-    @if (message) {
-        <p>{{ message }}</p>
-    }
-
-    }
+  </main>
 
 </div>

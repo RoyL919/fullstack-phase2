@@ -9,11 +9,16 @@ import { adminGuard } from './guards/admin-guard';
 import { Groups } from './groups/groups';
 import { Chat } from './chat/chat';
 import { Profile } from './profile/profile';
+import { Register } from './register/register';
 
 export const routes: Routes = [
   {
     path: 'login',
     component: Login
+  },
+  {
+    path: 'register',
+    component: Register
   },
   {
     path: 'dashboard',
