@@ -1,108 +1,332 @@
-<div class="page-container">
+<div class="app-layout">
 
-  <nav class="page-nav">
-    <a routerLink="/dashboard">Dashboard</a>
-    <a routerLink="/groups">Groups</a>
-    <a routerLink="/profile">Profile</a>
-  </nav>    
-    
-    <h1># {{ channelName }}</h1>
+  <!-- LEFT: GROUPS -->
+  <aside class="groups-sidebar">
 
-    <p>
-    Logged in as: <strong>{{ username }}</strong>
-    </p>
-
-    <hr>
-
-    @if (notifications.length > 0) {
-    <div>
-        @for (notification of notifications; track $index) {
-        <p>
-            <em>{{ notification }}</em>
-        </p>
-        }
+    <div class="app-title">
+      <div class="app-logo">C</div>
+      <span>ChatSpace</span>
     </div>
-    }
 
-    <h2>Messages</h2>
+    <div class="sidebar-heading group-heading">
 
-    @if (messages.length === 0) {
-    <p>No messages yet.</p>
-    }
+        <span>Groups</span>
 
-    <!-- Messages -->
-    @for (msg of messages; track $index) {
-    <div>
-        
-        @if (msg.profileImage) {
-            <img
-            [src]="msg.profileImage"
-            alt="Profile image"
-            style="
-                width: 40px;
-                height: 40px;
-                object-fit: cover;
-                border-radius: 50%;
-                vertical-align: middle;
-                margin-right: 8px;
-            ">
-        }
-        
-        <strong>{{ msg.username }}:</strong>
+        <button
+            class="add-group-button"
+            title="Add group"
+            (click)="showGroupForm = !showGroupForm">
+            +
+        </button>
 
-        @if (msg.message) {
-        <span>{{ msg.message }}</span>
-        }
+    </div>
 
-        <!-- Chat image -->
-        @if (msg.imageUrl) {
-        <div>
-            <img
-            [src]="msg.imageUrl"
-            alt="Chat image"
-            style="max-width: 300px; max-height: 300px;">
+    @if (showGroupForm) {
+
+        <div class="new-group-form">
+
+            <input
+              [(ngModel)]="newGroupName"
+              (keyup.enter)="createGroup()"
+              placeholder="Group name">
+
+            <button (click)="createGroup()">
+              Add
+            </button>
+
         </div>
+
+    }
+
+    <div class="group-list">
+
+      @for (group of groups; track group._id) {
+        <button
+          class="group-item"
+          [class.active]="selectedGroup?._id === group._id"
+          (click)="selectGroup(group)">
+
+          <span class="group-icon">
+            {{ group.name.charAt(0).toUpperCase() }}
+          </span>
+
+          <span>{{ group.name }}</span>
+
+        </button>
+      }
+
+    </div>
+
+    @if (user?.role === 'admin') {
+        <nav class="main-navigation">
+            <a routerLink="/admin">
+                Admin
+            </a>
+        </nav>
+    }
+
+    <div class="current-user">
+
+        <a
+            routerLink="/profile"
+            class="profile-button">
+
+            @if (user?.profileImage) {
+            <img
+                [src]="user.profileImage"
+                alt="Profile">
+            } @else {
+            <div class="user-placeholder">
+                {{ username.charAt(0).toUpperCase() }}
+            </div>
+            }
+
+            <div class="user-details">
+              <strong>{{ username }}</strong>
+              <span>{{ user?.role }}</span>
+            </div>
+
+        </a>
+
+        <button
+            class="settings-button"
+            title="Settings">
+            ⚙
+        </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MIDDLE: CHANNELS -->
+  <aside class="channels-sidebar">
+
+    @if (selectedGroup) {
+
+      <div class="channel-header">
+
+        <div class="channel-header-top">
+
+            <div>
+            <span class="small-label">GROUP</span>
+            <h2>{{ selectedGroup.name }}</h2>
+            </div>
+
+            <button
+            class="add-channel-button"
+            title="Add channel"
+            (click)="showChannelForm = !showChannelForm">
+            +
+            </button>
+
+        </div>
+
+        @if (showChannelForm) {
+            <div class="new-channel-form">
+
+            <input
+                [(ngModel)]="newChannelName"
+                (keyup.enter)="createChannel()"
+                placeholder="Channel name">
+
+            <button (click)="createChannel()">
+                Add
+            </button>
+
+            </div>
         }
 
-        <small>
-        {{ msg.timestamp }}
-        </small>
-    </div>
-    }
+        </div>
 
-    <br>
+      <div class="channel-list">
 
-    <!-- Text message -->
-    <input
-    [(ngModel)]="newMessage"
-    (keyup.enter)="sendMessage()"
-    placeholder="Type a message">
+        @for (channel of channels; track channel._id) {
 
-    <br><br>
+          <div
+            class="channel-item"
+            [class.active]="channel._id === channelId"
+            (click)="openChannel(channel)">
 
-    <!-- Image selection -->
-    <input
-    type="file"
-    accept="image/*"
-    (change)="selectImage($event)">
+            <span class="channel-hash">#</span>
 
-    @if (selectedImage) {
-    <p>
-        Selected: {{ selectedImage.name }}
-    </p>
-    }
+            <span class="channel-name">
+                {{ channel.name }}
+            </span>
 
-    <!-- Send button -->
-    <button
-    (click)="sendMessage()"
-    [disabled]="uploading">
+            <button
+                class="delete-channel-button"
+                title="Delete channel"
+                (click)="deleteChannel($event, channel)">
+                ×
+            </button>
 
-    @if (uploading) {
-        Uploading...
+          </div>
+
+        }
+
+      </div>
+
     } @else {
-        Send
+
+      <div class="loading-text">
+        Loading...
+      </div>
+
     }
 
-    </button>
+  </aside>
+
+
+  <!-- RIGHT: CHAT -->
+  <main class="chat-panel">
+
+    <header class="chat-header">
+
+      <div>
+        <h1># {{ channelName }}</h1>
+
+        @if (selectedGroup) {
+          <p>{{ selectedGroup.name }}</p>
+        }
+      </div>
+
+    </header>
+
+
+    <section class="messages">
+
+      @for (notification of notifications; track $index) {
+        <div class="notification">
+          {{ notification }}
+        </div>
+      }
+
+
+      @if (messages.length === 0) {
+
+        <div class="no-messages">
+          <h2># {{ channelName }}</h2>
+          <p>This is the start of the conversation.</p>
+        </div>
+
+      }
+
+
+      @for (msg of messages; track $index) {
+
+        <div class="message">
+
+          <div class="avatar">
+
+            @if (msg.profileImage) {
+
+              <img
+                [src]="msg.profileImage"
+                alt="Profile">
+
+            } @else {
+
+              <span>
+                {{ msg.username.charAt(0).toUpperCase() }}
+              </span>
+
+            }
+
+          </div>
+
+
+          <div class="message-body">
+
+            <div class="message-header">
+
+              <strong>
+                {{ msg.username }}
+              </strong>
+
+              <span>
+                {{ msg.timestamp | date:'d MMM yyyy, h:mm a'}}
+              </span>
+
+            </div>
+
+
+            @if (msg.message) {
+
+              <div class="message-text">
+                {{ msg.message }}
+              </div>
+
+            }
+
+
+            @if (msg.imageUrl) {
+
+              <img
+                class="chat-image"
+                [src]="msg.imageUrl"
+                alt="Chat image">
+
+            }
+
+          </div>
+
+        </div>
+
+      }
+
+    </section>
+
+
+    <!-- MESSAGE INPUT -->
+    <footer class="composer">
+
+      @if (selectedImage) {
+        <div class="selected-file">
+          Selected: {{ selectedImage.name }}
+        </div>
+      }
+
+      <div class="composer-row">
+
+        <label
+          class="attach-button"
+          title="Attach image">
+
+          +
+
+          <input
+            type="file"
+            accept="image/*"
+            (change)="selectImage($event)">
+
+        </label>
+
+
+        <input
+          class="message-input"
+          [(ngModel)]="newMessage"
+          (keyup.enter)="sendMessage()"
+          placeholder="Type a message">
+
+
+        <button
+          class="send-button"
+          (click)="sendMessage()"
+          [disabled]="uploading">
+
+          @if (uploading) {
+            Uploading...
+          } @else {
+            Send
+          }
+
+        </button>
+
+      </div>
+
+    </footer>
+
+  </main>
 
 </div>

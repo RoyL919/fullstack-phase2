@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   GroupService,
   Group,
@@ -30,13 +30,21 @@ export class Groups implements OnInit {
   newChannelName = '';
 
   message = '';
+  user: any = null;
 
   constructor(
     private groupService: GroupService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    const storedUser = localStorage.getItem('user');
+
+    if (storedUser) {
+      this.user = JSON.parse(storedUser);
+    }
+
     this.loadGroups();
   }
 
@@ -44,11 +52,14 @@ export class Groups implements OnInit {
     this.groupService.getGroups().subscribe({
       next: (groups) => {
         this.groups = groups;
-        this.cdr.detectChanges();
+
+        // Automatically open the first group
+        if (this.groups.length > 0 && !this.selectedGroup) {
+          this.selectGroup(this.groups[0]);
+        }
       },
       error: () => {
         this.message = 'Unable to load groups.';
-        this.cdr.detectChanges();
       }
     });
   }
@@ -59,10 +70,16 @@ export class Groups implements OnInit {
     this.groupService.getChannels(group._id).subscribe({
       next: (channels) => {
         this.channels = channels;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.message = 'Unable to load channels.';
+
+        // Automatically open the first channel
+        if (channels.length > 0) {
+          this.router.navigate([
+            '/chat',
+            channels[0]._id,
+            channels[0].name
+          ]);
+        }
+
         this.cdr.detectChanges();
       }
     });

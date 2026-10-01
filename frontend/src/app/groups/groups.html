@@ -1,63 +1,163 @@
-<div class="page-container">
+<div class="app-layout">
 
-  <nav class="page-nav">
-    <a routerLink="/dashboard">Dashboard</a>
-    <a routerLink="/groups">Groups</a>
-    <a routerLink="/profile">Profile</a>
-  </nav>
+  <!-- LEFT: GROUPS -->
+  <aside class="groups-sidebar">
 
-    <h1>Groups</h1>
+    <div class="app-title">
+      <div class="app-logo">C</div>
+      <span>ChatSpace</span>
+    </div>
 
-    @if (message) {
-    <p>{{ message }}</p>
+    <div class="sidebar-heading">
+      Groups
+    </div>
+
+    <div class="group-list">
+
+      @for (group of groups; track group._id) {
+        <button
+          class="group-item"
+          [class.active]="selectedGroup?._id === group._id"
+          (click)="selectGroup(group)">
+
+          <span class="group-icon">
+            {{ group.name.charAt(0).toUpperCase() }}
+          </span>
+
+          <span>{{ group.name }}</span>
+        </button>
+      }
+
+    </div>
+
+    <div class="create-group">
+      <input
+        [(ngModel)]="newGroupName"
+        (keyup.enter)="createGroup()"
+        placeholder="New group">
+
+      <button
+        class="add-button"
+        (click)="createGroup()">
+        +
+      </button>
+    </div>
+
+    <nav class="main-navigation">
+
+      <a routerLink="/dashboard">
+        Dashboard
+      </a>
+
+      <a routerLink="/profile">
+        Profile
+      </a>
+
+      @if (user?.role === 'admin') {
+        <a routerLink="/admin">
+          Admin
+        </a>
+      }
+
+    </nav>
+
+  </aside>
+
+
+  <!-- MIDDLE: CHANNELS -->
+  <aside class="channels-sidebar">
+
+    @if (selectedGroup) {
+
+      <div class="channel-header">
+        <span class="small-label">GROUP</span>
+        <h2>{{ selectedGroup.name }}</h2>
+      </div>
+
+      <div class="channel-list">
+
+        @for (channel of channels; track channel._id) {
+
+          <a
+            class="channel-item"
+            [routerLink]="[
+              '/chat',
+              channel._id,
+              channel.name
+            ]">
+
+            <span>#</span>
+            {{ channel.name }}
+
+          </a>
+
+        }
+
+        @if (channels.length === 0) {
+          <p class="empty-text">
+            No channels yet.
+          </p>
+        }
+
+      </div>
+
+      <div class="create-channel">
+
+        <input
+          [(ngModel)]="newChannelName"
+          (keyup.enter)="createChannel()"
+          placeholder="New channel">
+
+        <button
+          class="add-button"
+          (click)="createChannel()">
+          +
+        </button>
+
+      </div>
+
+    } @else {
+        <div class="empty-state">
+            <h3>No groups yet</h3>
+            <p>Create your first group to get started.</p>
+        </div>
     }
 
-    <h2>Create Group</h2>
+  </aside>
 
-    <input
-    [(ngModel)]="newGroupName"
-    placeholder="Group name">
 
-    <button (click)="createGroup()">
-    Create Group
-    </button>
+  <!-- RIGHT: CONTENT -->
+  <main class="main-content">
 
-    <hr>
-
-    <h2>Available Groups</h2>
-
-    @for (group of groups; track group._id) {
-    <div>
-        <button (click)="selectGroup(group)">
-        {{ group.name }}
-        </button>
-    </div>
+    @if (message) {
+      <div class="status-message">
+        {{ message }}
+      </div>
     }
 
     @if (selectedGroup) {
 
-    <hr>
+      <div class="welcome-content">
 
-    <h2>{{ selectedGroup.name }}</h2>
+        <div class="large-group-icon">
+          {{ selectedGroup.name.charAt(0).toUpperCase() }}
+        </div>
 
-    <h3>Channels</h3>
+        <h1>{{ selectedGroup.name }}</h1>
 
-    @for (channel of channels; track channel._id) {
         <p>
-            <a
-            [routerLink]="['/chat', channel._id, channel.name]">
-            # {{ channel.name }}
-            </a>
+          Select a channel from the left to open the conversation.
         </p>
+
+      </div>
+
+    } @else {
+        <div class="welcome-content">
+            <h1>Welcome to ChatSpace</h1>
+            <p>Create a group to start chatting.</p>
+        </div>
     }
 
-    <input
-        [(ngModel)]="newChannelName"
-        placeholder="Channel name">
-
-    <button (click)="createChannel()">
-        Create Channel
-    </button>
-    }
+  </main>
 
 </div>

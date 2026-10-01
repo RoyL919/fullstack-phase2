@@ -1,39 +1,77 @@
-<div class="login-container">
+<div class="login-page">
 
-  <h1>Chat Login</h1>
+  <div class="login-wrapper">
 
-  <form (ngSubmit)="login()">
+    <div class="brand">
+      <div class="brand-logo">C</div>
 
-    <label>Username</label>
-    <input
-      id="username"
-      type="text"
-      [(ngModel)]="username"
-      name="username"
-      minlength="3"
-      maxlength="20"
-      pattern="[a-zA-Z0-9_]+"
-      autocomplete="username"
-      required>
+      <h1>ChatSpace</h1>
 
-    <label>Password</label>
-    <input
-      id="password"
-      type="password"
-      [(ngModel)]="password"
-      name="password"
-      minlength="6"
-      autocomplete="current-password"
-      required>
+      <p>Connect with your groups and start chatting.</p>
+    </div>
 
-    @if (errorMessage) {
-      <p class="error">{{ errorMessage }}</p>
-    }
 
-    <button type="submit">
-      Login
-    </button>
+    <div class="login-card">
 
-  </form>
+      <h2>Welcome back</h2>
+
+      <p class="subtitle">
+        Sign in to your ChatSpace account
+      </p>
+
+      <form (ngSubmit)="login()">
+
+        <label>Username</label>
+
+        <input
+          type="text"
+          [(ngModel)]="username"
+          name="username"
+          placeholder="Enter your username"
+          required>
+
+
+        <label>Password</label>
+
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Enter your password"
+          required>
+
+
+        @if (errorMessage) {
+          <div class="error">
+            {{ errorMessage }}
+          </div>
+        }
+
+
+        <button type="submit">
+          Sign in
+        </button>
+        
+        <div class="divider">
+            <span>or</span>
+            </div>
+
+            <a
+              routerLink="/register"
+              class="register-button">
+              Create new account
+            </a>
+            
+      </form>
+
+    </div>
+
+    
+
+    <p class="footer-text">
+      ChatSpace
+    </p>
+
+  </div>
 
 </div>
